@@ -8,7 +8,7 @@ namespace Zetris
     class Game
     {
         #region constants
-        private static readonly string[] PIECES = new string[]
+        private static readonly string[] _PIECES = new string[]
             {"..X." +
              "..X." +
              "..X." +
@@ -46,9 +46,6 @@ namespace Zetris
             };
         #endregion
 
-        // Classic tetris width and height of the game's play field
-        private int _gameWidth;
-        private int _gameHeight;
         private int _screenHeight;
         private int _screenWidth;
 
@@ -57,18 +54,29 @@ namespace Zetris
         // Game UI class
         private IMenu _gameInterface;
         private GameLoop _gameLoop;
+        private ScreenBuffer<char> _buffer;
+
+        // Game Objects
+        private IGameObject playField;
 
         public Game()
         {
             // Screen size
-            _gameWidth = 12;
-            _gameHeight = 18;
+            
             _screenWidth = 80;
             _screenHeight = 40;
+            Console.CursorVisible = false;
+            Console.SetWindowSize(_screenWidth, _screenHeight);
+			Console.SetBufferSize(_screenWidth, _screenHeight);
 
-            _gameLoop = new GameLoop(_screenWidth, _screenHeight);
+            _buffer = new ScreenBuffer<char>(_screenWidth, _screenHeight);
+            _gameLoop = new GameLoop(_screenWidth, _screenHeight, _buffer);
             _rnd = new Random();
             _gameInterface = new ZetrisInterface(_screenWidth, _screenHeight);
+
+            playField = new ZetrisBoard();
+
+            _gameLoop.ScreenUpdate += playField.Render;
         }
 
         /// <summary>
@@ -76,6 +84,7 @@ namespace Zetris
         /// </summary>
         public void Start()
         {
+            _gameLoop.Start();
             // Menu
             // Start Game
 

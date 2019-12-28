@@ -13,7 +13,7 @@ namespace TestProject
         private const int gameWidth = 12;
         private const int gameHeight = 18;
         private byte[] game;
-        private ScreenBuffer buffer;
+        private GameEngine.ScreenBuffer<char> buffer;
         private const int screenHeight = 30, screenWidth = 80;
         private static InputSystem inputs;
 
@@ -62,7 +62,7 @@ namespace TestProject
         private Program()
         {
             // Create screen buffer
-            buffer = new ScreenBuffer(screenWidth, screenHeight);
+            buffer = new ScreenBuffer<char>(screenWidth, screenHeight);
 
             // Create Input system
             inputs = new InputSystem();
@@ -134,7 +134,7 @@ namespace TestProject
             bool gameOver = false;
             string controlString = $"\0ABCDEFG=█";
             char[] arr = controlString.ToCharArray(0, controlString.Length);
-            Stack<int> lines = new Stack<int>();
+            List<int> lines = new List<int>();
 
             int currentPiece = 1;
             int currentRotation = 0;
@@ -219,7 +219,7 @@ namespace TestProject
                                     for (int px = 1; px < gameWidth - 1; px++)
                                         game[(currentY + py) * gameWidth + px] = 8;
 
-                                    lines.Push(currentY + py);
+                                    lines.Add(currentY + py);
                                 }
                             }
                         }
@@ -256,7 +256,7 @@ namespace TestProject
 
                     foreach (int i in lines)
                         for (int px = 1; px < gameWidth - 1; px++)
-                            for (int py = i; py > 0; py--)
+                            for (int py = i; py > 0; --py)
                             {
                                 game[py * gameWidth + px] = game[(py - 1) * gameWidth + px];
                                 game[px] = 0;

@@ -10,7 +10,6 @@ namespace TestProject
         private char[,] screenBufferArray; //main buffer array
         private string screenBuffer; //buffer as string (used when drawing)
         private int roomWidth, roomHeight;
-        private int screenHeight, screenWidth;
 
         public ScreenBuffer(int width, int height)
         {
@@ -41,7 +40,6 @@ namespace TestProject
             Console.SetCursorPosition(0, 0);
             Console.Write(screenBuffer);
             screenBufferArray = new char[roomWidth, roomHeight];
-            //note that the screen is NOT cleared at any point as this will simply overwrite the existing values on screen. Clearing will cause flickering again.
         }
     }
 }
