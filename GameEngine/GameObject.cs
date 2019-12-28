@@ -4,7 +4,7 @@ using System.Text;
 
 namespace GameEngine
 {
-	class GameObject
+	public class GameObject
 	{
 		public Vector2 position { get; }
 		public uint rotation { get; }

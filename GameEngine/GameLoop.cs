@@ -2,11 +2,9 @@
 
 namespace GameEngine
 {
-	class GameLoop
+	public class GameLoop
 	{
-		private const long _MS_PER_UPDATE = 1000L / 30L;
-		private const int _SCREEN_WIDTH = 30;
-		private const int _SCREEN_HEIGHT = 80;
+		private const long _MS_PER_UPDATE = 1000L / 60L;
 
 		private bool _gameOver;
 		public Action ObjectUpdate	{ get; set; }
@@ -16,7 +14,7 @@ namespace GameEngine
 
 		public static InputSystem Input { get; private set; }
 
-		public GameLoop()
+		public GameLoop(int width, int height)
 		{
 			_gameOver = false;
 			Input = new InputSystem();
@@ -24,8 +22,8 @@ namespace GameEngine
 			GameOver += Input.TerminateSystem;
 
 			Console.CursorVisible = false;
-			Console.SetWindowSize(_SCREEN_WIDTH, _SCREEN_HEIGHT);
-			Console.SetBufferSize(_SCREEN_WIDTH, _SCREEN_HEIGHT);
+			Console.SetWindowSize(width, height);
+			Console.SetBufferSize(width, height);
 		}
 
 		public void Start()

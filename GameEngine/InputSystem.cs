@@ -4,7 +4,7 @@ using System.Collections.Concurrent;
 
 namespace GameEngine
 {
-	class InputSystem
+	public class InputSystem
 	{
 		public BlockingCollection<ConsoleKey> PressedKeys { get; private set; }
 		private Thread _keyProducer;

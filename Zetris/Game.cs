@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-// using GameEngine;
+using GameEngine;
 
 namespace Zetris
 {
@@ -47,31 +47,28 @@ namespace Zetris
         #endregion
 
         // Classic tetris width and height of the game's play field
-        private int gameWidth;
-        private int gameHeight;
-        private int screenHeight;
-        private int screenWidth;
+        private int _gameWidth;
+        private int _gameHeight;
+        private int _screenHeight;
+        private int _screenWidth;
 
         // Random to pick a new piece
-        private Random rnd;
-
+        private Random _rnd;
         // Game UI class
-        IMenu gameInterface;
-
-        // Game Spawner class
-
-        // Other variables
+        private IMenu _gameInterface;
+        private GameLoop _gameLoop;
 
         public Game()
         {
             // Screen size
-            gameWidth = 12;
-            gameHeight = 18;
-            screenWidth = 80;
-            screenHeight = 40;
+            _gameWidth = 12;
+            _gameHeight = 18;
+            _screenWidth = 80;
+            _screenHeight = 40;
 
-            rnd = new Random();
-            gameInterface = new ZetrisInterface(screenWidth, screenHeight);
+            _gameLoop = new GameLoop(_screenWidth, _screenHeight);
+            _rnd = new Random();
+            _gameInterface = new ZetrisInterface(_screenWidth, _screenHeight);
         }
 
         /// <summary>
