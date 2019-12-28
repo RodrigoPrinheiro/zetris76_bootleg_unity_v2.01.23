@@ -22,9 +22,12 @@ namespace GameEngine
 		}
 		private void ReadKeys()
 		{
-			ConsoleKey ck;
-			ck = Console.ReadKey(true).Key;
-			PressedKeys.Add(ck);
+			do
+			{
+				ConsoleKey ck;
+				ck = Console.ReadKey(true).Key;
+				PressedKeys.Add(ck);
+			} while (true);
 		}
 
 		public void TerminateSystem()
