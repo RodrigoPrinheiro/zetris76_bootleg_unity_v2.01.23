@@ -4,13 +4,13 @@ using System.Text;
 
 namespace GameEngine
 {
-	class ZetrisPiece
+	class GameObject
 	{
 		public Vector2 position { get; }
 		public uint rotation { get; }
 		public string shape { get; }
 
-		public ZetrisPiece(string shape)
+		public GameObject(string shape)
 		{
 			this.shape = shape;
 		}

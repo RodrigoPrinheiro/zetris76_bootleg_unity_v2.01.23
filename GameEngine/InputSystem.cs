@@ -6,32 +6,30 @@ namespace GameEngine
 {
 	class InputSystem
 	{
-		BlockingCollection<ConsoleKey> pressedKeys;
+		public BlockingCollection<ConsoleKey> PressedKeys { get; private set; }
+		private Thread _keyProducer;
+
 		public bool CurrentKey(out ConsoleKey key)
 		{
-			return pressedKeys.TryTake(out key);
+			return PressedKeys.TryTake(out key);
 		}
 
-		Thread keyProducer;
 		public InputSystem()
 		{
-			pressedKeys = new BlockingCollection<ConsoleKey>();
-			keyProducer = new Thread(ReadKeys);
-			keyProducer.Start();
+			PressedKeys = new BlockingCollection<ConsoleKey>();
+			_keyProducer = new Thread(ReadKeys);
+			_keyProducer.Start();
 		}
 		private void ReadKeys()
 		{
 			ConsoleKey ck;
-			do
-			{
-				ck = Console.ReadKey(true).Key;
-				pressedKeys.Add(ck);
-			} while (ck != ConsoleKey.Escape);
+			ck = Console.ReadKey(true).Key;
+			PressedKeys.Add(ck);
 		}
 
 		public void TerminateSystem()
 		{
-			keyProducer.Join();
+			_keyProducer.Join();
 		}
 	}
 }
