@@ -7,52 +7,13 @@ namespace Zetris
 {
     class Game
     {
-        #region constants
-        private static readonly string[] _PIECES = new string[]
-            {"..X." +
-             "..X." +
-             "..X." +
-             "..X.",
-
-             "..X." +
-             ".XX." +
-             ".X.." +
-             "....",
-
-             ".X.." +
-             ".XX." +
-             "..X." +
-             "....",
-
-             "...." +
-             ".XX." +
-             ".XX." +
-             "....",
-
-             "..X." +
-             ".XX." +
-             "..X." +
-             "....",
-
-             "...." +
-             ".XX." +
-             ".X.." +
-             ".X..",
-
-             "...." +
-             ".XX." +
-             "..X." +
-             "..X."
-            };
-        #endregion
-
         private int _screenHeight;
         private int _screenWidth;
 
-        // Random to pick a new piece
-        private Random _rnd;
         // Game UI class
         private IMenu _gameInterface;
+        
+        // Engine classes
         private GameLoop _gameLoop;
         private ScreenBuffer<char> _buffer;
 
@@ -71,11 +32,12 @@ namespace Zetris
 
             _buffer = new ScreenBuffer<char>(_screenWidth, _screenHeight);
             _gameLoop = new GameLoop(_screenWidth, _screenHeight, _buffer);
-            _rnd = new Random();
             _gameInterface = new ZetrisInterface(_screenWidth, _screenHeight);
 
+            // Initialize gameObjects
             playField = new ZetrisBoard();
 
+            // Add gameObjects to the loop
             _gameLoop.ScreenUpdate += playField.Render;
         }
 
@@ -84,10 +46,10 @@ namespace Zetris
         /// </summary>
         public void Start()
         {
-            _gameLoop.Start();
             // Menu
+            
             // Start Game
-
+            _gameLoop.Start();
                 // Inputs
                 // Do something with inputs
                 

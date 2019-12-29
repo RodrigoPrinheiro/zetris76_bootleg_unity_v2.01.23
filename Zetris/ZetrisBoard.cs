@@ -11,6 +11,13 @@ namespace Zetris
         private byte[] board;
         private int _gameWidth;
         private int _gameHeight;
+
+        // Game Variables
+        private PieceSpawner _spawner;
+        private Zetromino _currentPiece;
+        private int _currentY;
+        private int _currentX;
+
         public ZetrisBoard() 
         {
             // Classic tetris dimensions
