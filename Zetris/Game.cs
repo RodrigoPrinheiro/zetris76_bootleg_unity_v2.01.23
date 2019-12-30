@@ -46,24 +46,7 @@ namespace Zetris
         /// </summary>
         public void Start()
         {
-            // Menu
-            
-            // Start Game
             _gameLoop.Start();
-                // Inputs
-                // Do something with inputs
-                
-                // Force pieces down
-                // Lock pieces that cant move in place
-                // Check for lines
-
-                // Pick a new Piece
-
-                // Check for a game over
-
-                // Draw Screen
-
-            // Go back to Menu
         }
     }
 }

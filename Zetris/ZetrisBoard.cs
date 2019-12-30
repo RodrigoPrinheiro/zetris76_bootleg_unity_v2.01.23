@@ -18,6 +18,10 @@ namespace Zetris
         private const string _CONTROLS = "\x27\x25\x28Z";
         // 16 = 1 second, now do the math
         private const int _LINE_TIMER = 10;
+        // Speeds up the game every 10 pieces placed
+        private const int _SPEED_UP = 10;
+        // Maximum speed
+        private const int _MAX_SPEED = 5;
         #endregion
 
         /// <summary>
@@ -47,6 +51,7 @@ namespace Zetris
         // Other variables
         private Vector2 _spawn;
         private PreviewBox _nextPiecePreview;
+        private int _pieceCounter;
 
         public List<IGameObject> Childs { get; }
 
@@ -66,6 +71,7 @@ namespace Zetris
             _pieceAcceleration = 16;
             _hasRotated = false;
             _lines = new List<int>(4);
+            _pieceCounter = 0;
 
             // Create the board
             board = new byte[_gameDim.x * _gameDim.y];
@@ -114,7 +120,7 @@ namespace Zetris
                         }
                         board[px] = 0;
                     }
-
+                OnLineComplete(_lines.Count);
                 _lines.Clear();
             }
             // Force down
@@ -260,6 +266,14 @@ namespace Zetris
                     }
                 }
             }
+            OnPiecePlaced();
+        }
+
+        private void UpdateSpeed() 
+        {
+            _pieceCounter++;
+            if (_pieceCounter % _SPEED_UP == 0)
+                if (_pieceAcceleration > _MAX_SPEED) _pieceAcceleration--;
         }
 
         /// <summary>
@@ -320,5 +334,18 @@ namespace Zetris
 
             return true;
         }
+
+        private void OnPiecePlaced() 
+        {
+            piecePlaced?.Invoke();
+        }
+
+        private void OnLineComplete(int lines) 
+        {
+            lineComplete?.Invoke(lines);
+        }
+
+        public Action piecePlaced;
+        public Action<int> lineComplete;
     }
 }
