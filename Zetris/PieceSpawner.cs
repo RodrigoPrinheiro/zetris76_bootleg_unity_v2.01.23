@@ -45,19 +45,29 @@ namespace Zetris
             };
         #endregion
         private Random _rnd;
+        private int _currentPiece;
+        public string NextShape { get; private set; }
 
         public PieceSpawner() 
         {
             _rnd = new Random();
+            _currentPiece = _rnd.Next() % 7;
+            NextShape = _PIECES[_currentPiece];
         }
 
         /// <summary>
         /// Creates a new Zetronimo
         /// </summary>
         /// <returns> Returns the new Zetronimo piece</returns>
-        public Zetromino Spawn() 
+        public Zetromino GetNewPiece() 
         {
-            return new Zetromino(_PIECES[_rnd.Next() % 7]);
+            Zetromino newPiece = new Zetromino
+                (NextShape, _currentPiece);
+            
+            // Pick the next piece
+            _currentPiece = _rnd.Next() % 7;
+            NextShape = _PIECES[_currentPiece];
+            return newPiece;
         }
     }
 }

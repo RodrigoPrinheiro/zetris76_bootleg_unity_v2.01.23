@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace GameEngine
 {
@@ -8,10 +9,10 @@ namespace GameEngine
 
 		private ScreenBuffer<char> _drawBuffer;
 		private bool _gameOver;
-		public Action ObjectUpdate	{ get; set; }
-		public Action WorldUpdate	{ get; set; }
+		public Action ObjectUpdate { get; set; }
+		public Action WorldUpdate { get; set; }
 		public Action<ScreenBuffer<char>> ScreenUpdate { get; set; }
-		public Action GameOver		{ get; set; }
+		public Action GameOver { get; set; }
 
 		public static InputSystem Input { get; private set; }
 
@@ -24,27 +25,30 @@ namespace GameEngine
 			GameOver += Input.TerminateSystem;
 		}
 
+		/// <summary>
+		/// Simple Game Object add, puts the object's update and render
+		/// to the respective delegate.
+		/// </summary>
+		/// <param name="obj"> IGameObject to add</param>
+		public void AddGameObject(IGameObject obj) 
+		{
+			ObjectUpdate += obj.Update;
+			ScreenUpdate += obj.Render;
+		}
+
 		public void Start()
 		{
-			long previous = DateTime.Now.Ticks;
-			long lag = 0L;
-			long current;
-			long elapsed;
-
 			while (!_gameOver)
 			{
-				current = DateTime.Now.Ticks;
-				elapsed = current - previous;
-				previous = current;
-				lag += elapsed;
-
-				while(lag >= _MS_PER_UPDATE)
-				{
-					Update();
-					lag -= _MS_PER_UPDATE;
-				}
-
+				int timeToWait;
+				long start = DateTime.Now.Ticks;
+				Update();
 				Render();
+
+				timeToWait = (int)(start / 10000 + _MS_PER_UPDATE
+					- DateTime.Now.Ticks / 10000);
+				timeToWait = timeToWait > 0 ? timeToWait : 0;
+				Thread.Sleep(timeToWait);
 			}
 
 			GameOver?.Invoke();

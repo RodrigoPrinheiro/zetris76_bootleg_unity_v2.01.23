@@ -13,7 +13,7 @@ namespace TestProject
         private const int gameWidth = 12;
         private const int gameHeight = 18;
         private byte[] game;
-        private GameEngine.ScreenBuffer<char> buffer;
+        private ScreenBuffer<char> buffer;
         private const int screenHeight = 30, screenWidth = 80;
         private static InputSystem inputs;
 
@@ -255,12 +255,12 @@ namespace TestProject
                     Thread.Sleep(400);
 
                     foreach (int i in lines)
-                        for (int px = 1; px < gameWidth - 1; px++)
-                            for (int py = i; py > 0; --py)
-                            {
+                        for (int px = 1; px < gameWidth - 1; px++) 
+                        {
+                            for (int py = i; py > 0; py--)
                                 game[py * gameWidth + px] = game[(py - 1) * gameWidth + px];
-                                game[px] = 0;
-                            }
+                            game[px] = 0;
+                        }
                     lines.Clear();
                 }
 

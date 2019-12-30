@@ -11,10 +11,11 @@ namespace Zetris
     class Zetromino
     {
         public string Shape { get; }
-
-        public Zetromino(string shape) 
+        public int Index { get; }
+        public Zetromino(string shape, int i) 
         {
             Shape = shape;
+            Index = i;
         }
     }
 }

@@ -38,7 +38,7 @@ namespace Zetris
             playField = new ZetrisBoard();
 
             // Add gameObjects to the loop
-            _gameLoop.ScreenUpdate += playField.Render;
+            _gameLoop.AddGameObject(playField);
         }
 
         /// <summary>
