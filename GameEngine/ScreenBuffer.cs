@@ -28,6 +28,15 @@ namespace GameEngine
             }
             get => _currentBuffer[x, y];
         }
+
+        public void SetArray(T[] array, int x, int y) 
+        {
+            for (int i = 0; i < array.Length; i++)
+            {
+                this[x + i, y] = array[i];
+            }
+        }
+
         public void DrawScreen()
         {
             Swap();

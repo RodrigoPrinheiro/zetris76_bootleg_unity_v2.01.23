@@ -12,18 +12,18 @@ namespace GameEngine
 		/// <summary>
 		/// Right screen position.
 		/// </summary>
-		public uint y { get; }
+		public int y { get; }
 		/// <summary>
 		/// Top Screen position.
 		/// </summary>
-		public uint x { get; }
+		public int x { get; }
 
 		/// <summary>
 		/// Vector 2 constructor
 		/// </summary>
 		/// <param name="x">Initial X position.</param>
 		/// <param name="y">Initial Y position.</param>
-		public Vector2(uint x, uint y)
+		public Vector2(int x, int y)
 		{
 			this.x = x;
 			this.y = y;

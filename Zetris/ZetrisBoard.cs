@@ -25,9 +25,8 @@ namespace Zetris
         /// corresponding to each element of the _BOARD constant.
         /// </summary>
         private byte[] board;
-        private int _gameWidth;
-        private int _gameHeight;
-        
+        private Vector2 _gameDim;
+
         // Game Variables
         private PieceSpawner _spawner;
         private List<int> _lines;
@@ -46,20 +45,20 @@ namespace Zetris
         private int _lineTimer;
 
         // Other variables
-        private readonly int _spawnX;
-        private readonly int _spawnY;
+        private Vector2 _spawn;
+        private PreviewBox _nextPiecePreview;
 
-        public ZetrisBoard() 
+        public List<IGameObject> Childs { get; }
+
+        public ZetrisBoard()
         {
             // Classic tetris dimensions
-            _gameWidth = 12;
-            _gameHeight = 18;
+            _gameDim = new Vector2(12, 18);
             // Spawn location
-            _spawnX = (_gameWidth / 2) - 2;
-            _spawnY = 0;
+            _spawn = new Vector2((_gameDim.x / 2) - 2, 0);
             // Current piece X and Y position
-            _currentX = _spawnX;
-            _currentY = _spawnY;
+            _currentX = _spawn.x;
+            _currentY = _spawn.y;
 
             _spawner = new PieceSpawner();
             _currentPiece = _spawner.GetNewPiece();
@@ -69,26 +68,33 @@ namespace Zetris
             _lines = new List<int>(4);
 
             // Create the board
-            board = new byte[_gameWidth * _gameHeight];
-            for (int x = 0; x < _gameWidth; x++) 
+            board = new byte[_gameDim.x * _gameDim.y];
+            for (int x = 0; x < _gameDim.x; x++)
             {
-                for (int y = 0; y < _gameHeight; y++) 
+                for (int y = 0; y < _gameDim.y; y++)
                 {
-                    board[y * _gameWidth + x] = 
-                        (x == 0 || x == _gameWidth - 1 || y == _gameHeight - 1)
+                    board[y * _gameDim.x + x] =
+                        (x == 0 || x == _gameDim.x - 1 || y == _gameDim.y - 1)
                         // 9 is the last character of the board string in Game
                         ? (byte)9 : (byte)0;
                 }
             }
+
+            Childs = new List<IGameObject>();
+            _nextPiecePreview = new PreviewBox(new Vector2
+                (_gameDim.x, _gameDim.y + 3), "Next Piece", 'o');
+
+            Childs.Add(_nextPiecePreview);
+            _nextPiecePreview.Content = _spawner.NextShape;
         }
 
-        public void Update() 
+        public void Update()
         {
             // Update Counters
             _gravityCounter++;
             if (_lines.Count > 0)
                 _lineTimer++;
-            else 
+            else
             {
                 UpdateCurrentPiece();
                 _lineTimer = 0;
@@ -98,13 +104,13 @@ namespace Zetris
             if (_lines.Count > 0 && (_lineTimer >= _LINE_TIMER))
             {
                 foreach (int i in _lines)
-                    for (int px = 1; px < _gameWidth - 1; px++)
+                    for (int px = 1; px < _gameDim.x - 1; px++)
                     {
                         for (int py = i; py > 0; py--)
                         {
                             // Replace the row bellow with the one above
-                            board[py * _gameWidth + px] =
-                                board[(py - 1) * _gameWidth + px];
+                            board[py * _gameDim.x + px] =
+                                board[(py - 1) * _gameDim.x + px];
                         }
                         board[px] = 0;
                     }
@@ -112,7 +118,7 @@ namespace Zetris
                 _lines.Clear();
             }
             // Force down
-            else if (_gravityCounter >= _pieceAcceleration) 
+            else if (_gravityCounter >= _pieceAcceleration)
             {
                 // Move current piece down
                 if (PieceFits
@@ -120,7 +126,7 @@ namespace Zetris
                 {
                     _currentY++;
                 }
-                else 
+                else
                 {
                     LockPiece();
                     CheckLine();
@@ -128,7 +134,7 @@ namespace Zetris
                     _gameOver = !PieceFits
                         (_currentPiece, _pieceRotation, _currentX, _currentY);
                 }
-                
+
                 // Reset gravity counter
                 _gravityCounter = 0;
             }
@@ -141,11 +147,11 @@ namespace Zetris
             int boardStartY = 10;
 
             // Add to buffer the whole board with the correct characters
-            for (int x = 0; x < _gameWidth; x++)
-                for (int y = 0; y < _gameHeight; y++)
+            for (int x = 0; x < _gameDim.x; x++)
+                for (int y = 0; y < _gameDim.y; y++)
                 {
                     buffer[x + boardStartX, y + boardStartY] =
-                        boardPieces[board[y * _gameWidth + x]];
+                        boardPieces[board[y * _gameDim.x + x]];
                 }
 
             // Draw Current Piece
@@ -160,26 +166,26 @@ namespace Zetris
                             (char)(_currentPiece.Index + 65);
                     }
 
-            
+
         }
 
-        private void CheckLine() 
+        private void CheckLine()
         {
             // Last piece that touched the ground
             for (int py = 0; py < 4; py++)
             {
-                if (_currentY + py < _gameHeight - 1)
+                if (_currentY + py < _gameDim.y - 1)
                 {
                     bool line = true;
                     // Check for line
-                    for (int px = 1; px < _gameWidth - 1; px++)
-                        line &= (board[(_currentY + py) * _gameWidth + px]) != 0;
+                    for (int px = 1; px < _gameDim.x - 1; px++)
+                        line &= (board[(_currentY + py) * _gameDim.x + px]) != 0;
 
                     // Create the line (set game tile to 8, char array)
                     if (line)
                     {
-                        for (int px = 1; px < _gameWidth - 1; px++)
-                            board[(_currentY + py) * _gameWidth + px] = 8;
+                        for (int px = 1; px < _gameDim.x - 1; px++)
+                            board[(_currentY + py) * _gameDim.x + px] = 8;
 
                         _lines.Add(_currentY + py);
                     }
@@ -187,17 +193,19 @@ namespace Zetris
             }
         }
 
-        private void PickNewPiece() 
+        private void PickNewPiece()
         {
             _currentPiece = _spawner.GetNewPiece();
-            _currentX = _spawnX;
-            _currentY = _spawnY;
+            _currentX = _spawn.x;
+            _currentY = _spawn.y;
+            _pieceRotation = 0;
+            _nextPiecePreview.Content = _spawner.NextShape;
         }
 
         /// <summary>
         /// Updates the location of the currently controlled Zetromino 
         /// </summary>
-        private void UpdateCurrentPiece() 
+        private void UpdateCurrentPiece()
         {
             bool[] key = new bool[4];
             // Move the current piece with the current input
@@ -215,7 +223,7 @@ namespace Zetris
                 ? 1 : 0;
             // Update Right
             _currentX -= key[1] && PieceFits
-                (_currentPiece, _pieceRotation, _currentX - 1, _currentY) 
+                (_currentPiece, _pieceRotation, _currentX - 1, _currentY)
                 ? 1 : 0;
             // Update Down
             _currentY += key[2] && PieceFits
@@ -231,13 +239,13 @@ namespace Zetris
             }
             else
                 _hasRotated = false;
-            
+
         }
 
         /// <summary>
         /// Adds the current piece to the board
         /// </summary>
-        private void LockPiece() 
+        private void LockPiece()
         {
             for (int px = 0; px < 4; px++)
             {
@@ -245,9 +253,9 @@ namespace Zetris
                 {
                     // Add the piece to the game board
                     if (_currentPiece.Shape[RotatePiece(px, py, _pieceRotation)]
-                        .Equals('X')) 
+                        .Equals('X'))
                     {
-                        board[(_currentY + py) * _gameWidth + (_currentX + px)] =
+                        board[(_currentY + py) * _gameDim.x + (_currentX + px)] =
                             (byte)(_currentPiece.Index + 1);
                     }
                 }
@@ -261,7 +269,7 @@ namespace Zetris
         /// <param name="y"> Zetromino shape Y</param>
         /// <param name="r"> Rotation of the Zetromino piece</param>
         /// <returns> Index in the Zetromino shape string</returns>
-        private int RotatePiece(int x, int y, int r) 
+        private int RotatePiece(int x, int y, int r)
         {
             switch (r % 4)
             {
@@ -297,11 +305,11 @@ namespace Zetris
                     int pi = RotatePiece(px, py, rotation);
 
                     // Get game pos of index
-                    int gi = (posY + py) * _gameWidth + (posX + px);
+                    int gi = (posY + py) * _gameDim.x + (posX + px);
 
                     // If its inside the game field
-                    if (posX + px >= 0 && posX + px < _gameWidth)
-                        if (posY + py >= 0 && posY + py < _gameHeight)
+                    if (posX + px >= 0 && posX + px < _gameDim.x)
+                        if (posY + py >= 0 && posY + py < _gameDim.y)
                         {
                             // Is the game field empty in the next position
                             if (piece.Shape[pi].Equals('X') && board[gi] != 0)
@@ -312,7 +320,5 @@ namespace Zetris
 
             return true;
         }
-
-        
     }
 }

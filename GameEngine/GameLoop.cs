@@ -34,6 +34,13 @@ namespace GameEngine
 		{
 			ObjectUpdate += obj.Update;
 			ScreenUpdate += obj.Render;
+			
+			if (obj.Childs != null)
+				foreach (IGameObject child in obj.Childs) 
+				{
+					ObjectUpdate += child.Update;
+					ScreenUpdate += child.Render;
+				}
 		}
 
 		public void Start()

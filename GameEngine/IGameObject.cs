@@ -4,9 +4,10 @@ using System.Text;
 
 namespace GameEngine
 {
-	public interface IGameObject
-	{
-		void Update();
-		void Render(ScreenBuffer<char> buffer);
-	}
+    public interface IGameObject
+    {
+        void Update();
+        void Render(ScreenBuffer<char> buffer);
+        List<IGameObject> Childs { get; }
+    }
 }
