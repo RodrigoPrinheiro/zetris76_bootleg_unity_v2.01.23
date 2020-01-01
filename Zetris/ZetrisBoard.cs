@@ -54,7 +54,10 @@ namespace Zetris
         private PreviewBox _nextPiecePreview;
 		private ScoreDisplay _scoreDisplay;
         private int _pieceCounter;
-
+        private Action piecePlaced;
+        private Action triggerGameOver;
+        private Action<byte> lineComplete;
+        
         public List<IGameObject> Childs { get; }
 
         public ZetrisBoard()
@@ -144,19 +147,19 @@ namespace Zetris
                 else
                 {
                     LockPiece();
+                    UpdateSpeed();
                     CheckLine();
                     PickNewPiece();
                     _gameOver = !PieceFits
                         (_currentPiece, _pieceRotation, _currentX, _currentY);
                 }
-
                 // Reset gravity counter
                 _gravityCounter = 0;
-
-				// Check gameover
-				if (_gameOver)
-					OnGameOver();
             }
+
+            // Check gameover
+            if (_gameOver)
+                OnGameOver();
         }
 
         public void Render(ScreenBuffer<char> buffer)
@@ -184,8 +187,6 @@ namespace Zetris
                             (_currentY + py + boardStartY)] =
                             (char)(_currentPiece.Index + 65);
                     }
-
-
         }
 
 		public void SetGameOverTrigger(Action gameOverTrigger)
@@ -367,9 +368,5 @@ namespace Zetris
 		{
 			triggerGameOver?.Invoke();
 		}
-		
-        public Action piecePlaced;
-        public Action triggerGameOver;
-        public Action<byte> lineComplete;
     }
 }

@@ -9,11 +9,9 @@ namespace GameEngine
 
 		private ScreenBuffer<char> _drawBuffer;
 		private bool _gameOver;
-		public Action ObjectUpdate { get; set; }
-		public Action WorldUpdate { get; set; }
-		public Action<ScreenBuffer<char>> ScreenUpdate { get; set; }
+		private Action objectUpdate;
+		private Action<ScreenBuffer<char>> screenUpdate;
 		public Action GameOver { get; private set; }
-
 		public static InputSystem Input { get; private set; }
 
 		public GameLoop(int width, int height, ScreenBuffer<char> buffer)
@@ -22,7 +20,7 @@ namespace GameEngine
 			Input = new InputSystem();
 			_drawBuffer = buffer;
 
-			GameOver += Input.TerminateSystem;
+			//GameOver += Input.TerminateSystem;
 			GameOver += TriggerGameOver;
 		}
 
@@ -33,14 +31,14 @@ namespace GameEngine
 		/// <param name="obj"> IGameObject to add</param>
 		public void AddGameObject(IGameObject obj) 
 		{
-			ObjectUpdate += obj.Update;
-			ScreenUpdate += obj.Render;
+			objectUpdate += obj.Update;
+			screenUpdate += obj.Render;
 			
 			if (obj.Childs != null)
 				foreach (IGameObject child in obj.Childs) 
 				{
-					ObjectUpdate += child.Update;
-					ScreenUpdate += child.Render;
+					objectUpdate += child.Update;
+					screenUpdate += child.Render;
 				}
 		}
 
@@ -58,19 +56,16 @@ namespace GameEngine
 				timeToWait = timeToWait > 0 ? timeToWait : 0;
 				Thread.Sleep(timeToWait);
 			}
-
-			GameOver?.Invoke();
 		}
 
 		private void Update()
 		{
-			ObjectUpdate?.Invoke();
-			WorldUpdate?.Invoke();
+			objectUpdate?.Invoke();
 		}
 
 		private void Render()
 		{
-			ScreenUpdate?.Invoke(_drawBuffer);
+			screenUpdate?.Invoke(_drawBuffer);
 			_drawBuffer.DrawScreen();
 		}
 
