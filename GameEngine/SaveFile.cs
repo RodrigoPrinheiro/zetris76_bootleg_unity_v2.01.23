@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace GameEngine
 {
-	class SaveFile
+	public class SaveFile
 	{
 		private const byte _MAX_SAVED_SCORES	= 10;
 		private const string _SAVE_DIR_NAME		= "ZetrisGame";

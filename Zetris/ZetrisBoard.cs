@@ -33,6 +33,7 @@ namespace Zetris
 
         // Game Variables
         private PieceSpawner _spawner;
+		private ScoreSystem _scoreSystem;
         private List<int> _lines;
         private bool _gameOver;
 
@@ -51,6 +52,7 @@ namespace Zetris
         // Other variables
         private Vector2 _spawn;
         private PreviewBox _nextPiecePreview;
+		private ScoreDisplay _scoreDisplay;
         private int _pieceCounter;
 
         public List<IGameObject> Childs { get; }
@@ -73,8 +75,11 @@ namespace Zetris
             _lines = new List<int>(4);
             _pieceCounter = 0;
 
-            // Create the board
-            board = new byte[_gameDim.x * _gameDim.y];
+			_scoreDisplay = new ScoreDisplay(new Vector2(_gameDim.x, _gameDim.y - 7));
+			_scoreSystem = new ScoreSystem(_scoreDisplay.UpdateScore);
+
+			// Create the board
+			board = new byte[_gameDim.x * _gameDim.y];
             for (int x = 0; x < _gameDim.x; x++)
             {
                 for (int y = 0; y < _gameDim.y; y++)
@@ -90,9 +95,13 @@ namespace Zetris
             _nextPiecePreview = new PreviewBox(new Vector2
                 (_gameDim.x, _gameDim.y + 3), "Next Piece", 'o');
 
-            Childs.Add(_nextPiecePreview);
+			Childs.Add(_nextPiecePreview);
+			Childs.Add(_scoreDisplay);
             _nextPiecePreview.Content = _spawner.NextShape;
-        }
+
+			lineComplete += _scoreSystem.LineComplete;
+			piecePlaced += _scoreSystem.PiecePlaced;
+		}
 
         public void Update()
         {
@@ -120,7 +129,7 @@ namespace Zetris
                         }
                         board[px] = 0;
                     }
-                OnLineComplete(_lines.Count);
+                OnLineComplete((byte)_lines.Count);
                 _lines.Clear();
             }
             // Force down
@@ -340,12 +349,12 @@ namespace Zetris
             piecePlaced?.Invoke();
         }
 
-        private void OnLineComplete(int lines) 
+        private void OnLineComplete(byte lines) 
         {
             lineComplete?.Invoke(lines);
         }
-
+		
         public Action piecePlaced;
-        public Action<int> lineComplete;
+        public Action<byte> lineComplete;
     }
 }

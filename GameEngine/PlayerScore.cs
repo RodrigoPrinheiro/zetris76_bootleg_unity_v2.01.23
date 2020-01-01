@@ -2,7 +2,7 @@
 
 namespace GameEngine
 {
-	struct PlayerScore : IComparable<PlayerScore>
+	public struct PlayerScore : IComparable<PlayerScore>
 	{
 		public string PlayerName { get; }
 		public uint Score { get; }
