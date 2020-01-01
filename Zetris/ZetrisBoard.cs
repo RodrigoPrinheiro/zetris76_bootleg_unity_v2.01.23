@@ -152,6 +152,10 @@ namespace Zetris
 
                 // Reset gravity counter
                 _gravityCounter = 0;
+
+				// Check gameover
+				if (_gameOver)
+					OnGameOver();
             }
         }
 
@@ -183,6 +187,11 @@ namespace Zetris
 
 
         }
+
+		public void SetGameOverTrigger(Action gameOverTrigger)
+		{
+			triggerGameOver = gameOverTrigger;
+		}
 
         private void CheckLine()
         {
@@ -353,8 +362,14 @@ namespace Zetris
         {
             lineComplete?.Invoke(lines);
         }
+
+		private void OnGameOver()
+		{
+			triggerGameOver?.Invoke();
+		}
 		
         public Action piecePlaced;
+        public Action triggerGameOver;
         public Action<byte> lineComplete;
     }
 }

@@ -12,7 +12,7 @@ namespace GameEngine
 		public Action ObjectUpdate { get; set; }
 		public Action WorldUpdate { get; set; }
 		public Action<ScreenBuffer<char>> ScreenUpdate { get; set; }
-		public Action GameOver { get; set; }
+		public Action GameOver { get; private set; }
 
 		public static InputSystem Input { get; private set; }
 
@@ -23,6 +23,7 @@ namespace GameEngine
 			_drawBuffer = buffer;
 
 			GameOver += Input.TerminateSystem;
+			GameOver += TriggerGameOver;
 		}
 
 		/// <summary>
@@ -73,7 +74,7 @@ namespace GameEngine
 			_drawBuffer.DrawScreen();
 		}
 
-		public void TriggerGameOver()
+		private void TriggerGameOver()
 		{
 			_gameOver = true;
 		}

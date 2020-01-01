@@ -12,13 +12,14 @@ namespace Zetris
 
         // Game UI class
         private IMenu _gameInterface;
+        private IMenu _mainMenu;
         
         // Engine classes
         private GameLoop _gameLoop;
         private ScreenBuffer<char> _buffer;
 
         // Game Objects
-        private IGameObject playField;
+        private ZetrisBoard playField;
 
         public Game()
         {
@@ -29,24 +30,44 @@ namespace Zetris
             Console.CursorVisible = false;
             Console.SetWindowSize(_screenWidth, _screenHeight);
 			Console.SetBufferSize(_screenWidth, _screenHeight);
+			Console.OutputEncoding = Encoding.UTF8;
 
-            _buffer = new ScreenBuffer<char>(_screenWidth, _screenHeight);
-            _gameLoop = new GameLoop(_screenWidth, _screenHeight, _buffer);
-            _gameInterface = new ZetrisInterface(_screenWidth, _screenHeight);
-
-            // Initialize gameObjects
-            playField = new ZetrisBoard();
-
-            // Add gameObjects to the loop
-            _gameLoop.AddGameObject(playField);
+			_mainMenu = new MainMenu();            
         }
 
-        /// <summary>
-        /// Runs the game
-        /// </summary>
-        public void Start()
+		private void InitializeGame()
+		{
+			_buffer = new ScreenBuffer<char>(_screenWidth, _screenHeight);
+			_gameLoop = new GameLoop(_screenWidth, _screenHeight, _buffer);
+			_gameInterface = new ZetrisInterface(_screenWidth, _screenHeight);
+
+			// Initialize gameObjects
+			playField = new ZetrisBoard();
+
+			// Add gameObjects to the loop
+			_gameLoop.AddGameObject(playField);
+			playField.SetGameOverTrigger(_gameLoop.GameOver);
+
+			_gameLoop.Start();
+		}
+
+		/// <summary>
+		/// Runs the game
+		/// </summary>
+		public void Start()
         {
-            _gameLoop.Start();
+			ConsoleKey userKey = ConsoleKey.A;
+
+			while (userKey != ConsoleKey.Escape)
+			{
+				_mainMenu.ShowMenu();
+
+				userKey = Console.ReadKey().Key;
+				if (userKey == ConsoleKey.Enter)
+					InitializeGame();
+
+				Console.Clear();
+			}
         }
     }
 }
