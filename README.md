@@ -60,6 +60,8 @@ dada da seguinte forma:
 
 #### Fluxograma
 
+* Loop de jogo do _Tetris_
+
 ![Fluxograma]
 
 [Diagrama]:Images/Diagrama.png
