@@ -14,11 +14,11 @@ namespace GameEngine
 		public Action GameOver { get; private set; }
 		public static InputSystem Input { get; private set; }
 
-		public GameLoop(int width, int height, ScreenBuffer<char> buffer)
+		public GameLoop(int width, int height)
 		{
 			_gameOver = false;
 			Input = new InputSystem();
-			_drawBuffer = buffer;
+			_drawBuffer = new ScreenBuffer<char>(width, height);
 
 			//GameOver += Input.TerminateSystem;
 			GameOver += TriggerGameOver;

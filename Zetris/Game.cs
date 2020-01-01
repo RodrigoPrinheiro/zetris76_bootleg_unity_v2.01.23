@@ -15,7 +15,6 @@ namespace Zetris
         
         // Engine classes
         private GameLoop _gameLoop;
-        private ScreenBuffer<char> _buffer;
 
         // Game Objects
         private ZetrisBoard playField;
@@ -36,8 +35,7 @@ namespace Zetris
 
 		private void InitializeGame()
 		{
-			_buffer = new ScreenBuffer<char>(_screenWidth, _screenHeight);
-			_gameLoop = new GameLoop(_screenWidth, _screenHeight, _buffer);
+			_gameLoop = new GameLoop(_screenWidth, _screenHeight);
 
 			// Initialize gameObjects
 			playField = new ZetrisBoard();
