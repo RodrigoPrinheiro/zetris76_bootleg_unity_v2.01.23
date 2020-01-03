@@ -12,12 +12,10 @@ namespace Zetris
 		private string _playerName;
 
         // Game UI class
-        private IMenu _gameInterface;
         private IMenu _mainMenu;
         
         // Engine classes
         private GameLoop _gameLoop;
-        private ScreenBuffer<char> _buffer;
 
         // Game Objects
         private ZetrisBoard playField;
@@ -39,10 +37,7 @@ namespace Zetris
 		private void InitializeGame()
 		{
 			_playerName = GetPlayerName();
-
-			_buffer = new ScreenBuffer<char>(_screenWidth, _screenHeight);
-			_gameLoop = new GameLoop(_screenWidth, _screenHeight, _buffer);
-			_gameInterface = new ZetrisInterface(_screenWidth, _screenHeight);
+			_gameLoop = new GameLoop(_screenWidth, _screenHeight);
 
 			// Initialize gameObjects
 			playField = new ZetrisBoard(_playerName);

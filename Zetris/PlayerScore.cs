@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GameEngine
+namespace Zetris
 {
 	public struct PlayerScore : IComparable<PlayerScore>
 	{
@@ -14,8 +14,6 @@ namespace GameEngine
 		}
 
 		public int CompareTo(PlayerScore other) => other.Score.CompareTo(Score);
-
-
 
 		public string ToString(char divisorChar) => 
 			PlayerName + divisorChar + Score.ToString();
