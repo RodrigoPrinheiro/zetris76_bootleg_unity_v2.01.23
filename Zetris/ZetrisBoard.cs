@@ -1,4 +1,10 @@
-﻿using System;
+﻿/// @file
+/// @brief Tetris playable area class.
+/// 
+/// @author Rodrigo Pinheiro e Tomás Franco
+/// @date 2020
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using GameEngine;
@@ -29,38 +35,110 @@ namespace Zetris
         /// corresponding to each element of the _BOARD constant.
         /// </summary>
         private byte[] board;
+        /// <summary>
+        /// Variable used to store game dimensions, x and y size of the board.
+        /// </summary>
         private Vector2 _gameDim;
 
         // Game Variables
+        /// <summary>
+        /// PieceSpawner type variable used to spawn new Zetrominos
+        /// </summary>
         private PieceSpawner _spawner;
+        /// <summary>
+        /// Score system class to store the score and save it after the player
+        /// causes a Game Over.
+        /// </summary>
 		private ScoreSystem _scoreSystem;
+        /// <summary>
+        /// List of size 4 to store the lines the player created in that update
+        /// </summary>
         private List<int> _lines;
+        /// <summary>
+        /// Boolean to store if the game is over or not
+        /// </summary>
         private bool _gameOver;
 
         // Current Piece tracking variables
+        /// <summary>
+        /// Zetromino type member to store the currently controlled piece.
+        /// </summary>
         private Zetromino _currentPiece;
+        /// <summary>
+        /// Counter for when The current controlled piece should be pushed down.
+        /// </summary>
         private short _gravityCounter;
+        /// <summary>
+        /// Boolean to control if the current piece has rotated or not in this
+        /// update.
+        /// </summary>
         private bool _hasRotated;
+        /// <summary>
+        /// Currently controlled piece rotation value.
+        /// </summary>
         private int _pieceRotation;
+        /// <summary>
+        /// Current piece Y position.
+        /// </summary>
         private int _currentY;
+        /// <summary>
+        /// Current piece X position.
+        /// </summary>
         private int _currentX;
+        /// <summary>
+        /// Control value for how fast the current piece is being pushed down
+        /// </summary>
         private int _pieceAcceleration;
 
         // Line checking variables
+        /// <summary>
+        /// Timer for how long do the lines stay on screen until they are cleared.
+        /// </summary>
         private int _lineTimer;
 
         // Other variables
+        /// <summary>
+        /// Spawn location of the pieces.
+        /// </summary>
         private Vector2 _spawn;
+        /// <summary>
+        /// PreviewBox with the next selected piece.
+        /// </summary>
         private PreviewBox _nextPiecePreview;
+        /// <summary>
+        /// ScoreDisplay with the current player score.
+        /// </summary>
 		private ScoreDisplay _scoreDisplay;
+        /// <summary>
+        /// Counter to track how many pieces has the player placed.
+        /// </summary>
         private int _pieceCounter;
+        /// <summary>
+        /// Current player name
+        /// </summary>
 		private string _playerName;
+        /// <summary>
+        /// Delegate for when a piece is placed
+        /// </summary>
         private Action piecePlaced;
+        /// <summary>
+        /// Delegate for when game over is triggered.
+        /// </summary>
         private Action triggerGameOver;
+        /// <summary>
+        /// Delegate for when a line is complete.
+        /// </summary>
         private Action<byte> lineComplete;
         
+        /// <summary>
+        /// List of child game objects
+        /// </summary>
         public List<IGameObject> Childs { get; }
 
+        /// <summary>
+        /// Zetris board constructor
+        /// </summary>
+        /// <param name="playerName">Current player name</param>
         public ZetrisBoard(string playerName)
         {
 			_playerName = playerName;
@@ -109,6 +187,9 @@ namespace Zetris
 			piecePlaced += _scoreSystem.PiecePlaced;
 		}
 
+        /// <summary>
+        /// Update method from IGameObject
+        /// </summary>
         public void Update()
         {
             // Update Counters
@@ -165,6 +246,10 @@ namespace Zetris
                 OnGameOver();
         }
 
+        /// <summary>
+        /// Render Method from IGameObject
+        /// </summary>
+        /// <param name="buffer">Screen buffer to be written to</param>
         public void Render(ScreenBuffer<char> buffer)
         {
             char[] boardPieces = _BOARD.ToCharArray(0, _BOARD.Length);
@@ -192,11 +277,18 @@ namespace Zetris
                     }
         }
 
+        /// <summary>
+        /// Sets outside of the class the delegate for a game over.
+        /// </summary>
+        /// <param name="gameOverTrigger"> Game Over Delegate</param>
 		public void SetGameOverTrigger(Action gameOverTrigger)
 		{
 			triggerGameOver += gameOverTrigger;
 		}
 
+        /// <summary>
+        /// Checks for lines in the current play.
+        /// </summary>
         private void CheckLine()
         {
             // Last piece that touched the ground
@@ -221,6 +313,9 @@ namespace Zetris
             }
         }
 
+        /// <summary>
+        /// Picks a new piece to be used as the current piece and resets values
+        /// </summary>
         private void PickNewPiece()
         {
             _currentPiece = _spawner.GetNewPiece();
@@ -291,6 +386,9 @@ namespace Zetris
             OnPiecePlaced();
         }
 
+        /// <summary>
+        /// Updates game speed
+        /// </summary>
         private void UpdateSpeed() 
         {
             _pieceCounter++;
@@ -357,16 +455,26 @@ namespace Zetris
             return true;
         }
 
+        /// <summary>
+        /// When a piece is placed this action is called.
+        /// </summary>
         private void OnPiecePlaced() 
         {
             piecePlaced?.Invoke();
         }
 
+        /// <summary>
+        /// When a line is complete this action is called
+        /// </summary>
+        /// <param name="lines"> Number of lines done in a row</param>
         private void OnLineComplete(byte lines) 
         {
             lineComplete?.Invoke(lines);
         }
 
+        /// <summary>
+        /// When the game ends this action is called.
+        /// </summary>
 		private void OnGameOver()
 		{
 			_scoreSystem.SaveScore(_playerName);

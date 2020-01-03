@@ -1,18 +1,44 @@
-﻿using System;
+﻿/// @file
+/// @brief File contains a PreviewBox which is used to write a simple box to the
+/// buffer with a designated user content.
+/// 
+/// @author Rodrigo Pinheiro e Tomás Franco
+/// @date 2020
+
 using System.Collections.Generic;
-using System.Text;
 using GameEngine;
 
 namespace Zetris
 {
+    /// <summary>
+    /// Anchors a box with a string content to another game object
+    /// </summary>
     class PreviewBox : IGameObject
     {
+        /// <summary>
+        /// Anchored position
+        /// </summary>
         private Vector2 _anchor;
+        /// <summary>
+        /// Header text of the box
+        /// </summary>
         private string _topText;
+        /// <summary>
+        /// Character to be used as box borders
+        /// </summary>
         private char _borders;
+        /// <summary>
+        /// Box content
+        /// </summary>
         private string _content;
 
+        /// <summary>
+        /// List of child objects
+        /// </summary>
         public List<IGameObject> Childs { get; }
+        /// <summary>
+        /// Property to get and set the content of the box.
+        /// </summary>
         public string Content 
         { 
             get => _content;
@@ -22,6 +48,14 @@ namespace Zetris
             }
         }
 
+        /// <summary>
+        /// Preview box constructor, it needs an anchor, header and border.
+        /// </summary>
+        /// <param name="anchor"> Anchor position X, Y of the box</param>
+        /// <param name="header">
+        /// Header text to be written on top of the box
+        /// </param>
+        /// <param name="border"> Border character to be used as borders</param>
         public PreviewBox(Vector2 anchor, string header, char border) 
         {
             _anchor = anchor;
@@ -29,6 +63,10 @@ namespace Zetris
             _borders = border;
         }
 
+        /// <summary>
+        /// Render method for the box
+        /// </summary>
+        /// <param name="buffer"> Currently in use buffer</param>
         public void Render(ScreenBuffer<char> buffer)
         {
             int screenStart = (buffer.XDim / 2 - 5);
@@ -60,6 +98,9 @@ namespace Zetris
             }
         }
 
+        /// <summary>
+        /// Update of the box
+        /// </summary>
         public void Update()
         {
 

@@ -1,6 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿/// @file
+/// @brief File contains the Vector2 struct, used to store an x, y coordinates 
+/// value
+/// 
+/// @author Rodrigo Pinheiro e Tomás Franco
+/// @date 2020
 
 namespace GameEngine
 {
