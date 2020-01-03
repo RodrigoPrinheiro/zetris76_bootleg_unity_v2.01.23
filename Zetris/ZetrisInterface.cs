@@ -18,10 +18,5 @@ namespace Zetris
         {
 
         }
-
-        private void ShowScores()
-        {
-
-        }
     }
 }

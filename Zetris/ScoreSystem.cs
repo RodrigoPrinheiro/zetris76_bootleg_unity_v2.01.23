@@ -40,7 +40,16 @@ namespace Zetris
 		public void SaveScore(string playerName)
 		{
 			SaveFile save = new SaveFile();
-			save.SaveScore(playerName, _score);
+
+			string finalName = "";
+
+			for (int i = 0; i < 3 && i < playerName.Length; i++)
+				finalName += playerName[i];
+
+			for (int j = finalName.Length; j < 3; j++)
+				finalName += '-';
+
+			save.SaveScore(finalName.ToUpper(), _score);
 		}
 	}
 }

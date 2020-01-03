@@ -54,11 +54,14 @@ namespace Zetris
         private PreviewBox _nextPiecePreview;
 		private ScoreDisplay _scoreDisplay;
         private int _pieceCounter;
+		private string _playerName;
 
         public List<IGameObject> Childs { get; }
 
-        public ZetrisBoard()
+        public ZetrisBoard(string playerName)
         {
+			_playerName = playerName;
+
             // Classic tetris dimensions
             _gameDim = new Vector2(12, 18);
             // Spawn location
@@ -190,7 +193,7 @@ namespace Zetris
 
 		public void SetGameOverTrigger(Action gameOverTrigger)
 		{
-			triggerGameOver = gameOverTrigger;
+			triggerGameOver += gameOverTrigger;
 		}
 
         private void CheckLine()
@@ -365,6 +368,7 @@ namespace Zetris
 
 		private void OnGameOver()
 		{
+			_scoreSystem.SaveScore(_playerName);
 			triggerGameOver?.Invoke();
 		}
 		

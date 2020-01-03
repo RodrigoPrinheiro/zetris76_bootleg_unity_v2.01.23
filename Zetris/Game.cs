@@ -9,6 +9,7 @@ namespace Zetris
     {
         private int _screenHeight;
         private int _screenWidth;
+		private string _playerName;
 
         // Game UI class
         private IMenu _gameInterface;
@@ -37,12 +38,14 @@ namespace Zetris
 
 		private void InitializeGame()
 		{
+			_playerName = GetPlayerName();
+
 			_buffer = new ScreenBuffer<char>(_screenWidth, _screenHeight);
 			_gameLoop = new GameLoop(_screenWidth, _screenHeight, _buffer);
 			_gameInterface = new ZetrisInterface(_screenWidth, _screenHeight);
 
 			// Initialize gameObjects
-			playField = new ZetrisBoard();
+			playField = new ZetrisBoard(_playerName);
 
 			// Add gameObjects to the loop
 			_gameLoop.AddGameObject(playField);
@@ -63,11 +66,23 @@ namespace Zetris
 				_mainMenu.ShowMenu();
 
 				userKey = Console.ReadKey().Key;
+				
 				if (userKey == ConsoleKey.Enter)
 					InitializeGame();
 
 				Console.Clear();
 			}
         }
-    }
+
+		private string GetPlayerName()
+		{
+			string name;
+
+			Console.Clear();
+			Console.WriteLine("Please Input your name \n(ENTER when done) ");
+			name = Console.ReadLine();
+
+			return name;
+		}
+	}
 }
