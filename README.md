@@ -15,6 +15,10 @@ objetos) e criação da Interface `IGameObject`
 
 * ### [Tomás Franco](https://github.com/ThomasFranque) 21803301
   
+  * Engine para poder ser usado independentemente do jogo.
+  * Sistema de scores.
+  * Menus.
+  
 ## Arquitetura da solução
 
 ### Descrição da solução
@@ -26,7 +30,10 @@ _Tetris_.
 
 #### _Engine_
 
-    * Faz esta parte tomas
+  * A componente do game engine foi feita de maneira a que não estivesse ligada de forma alguma ao eventual jogo criado, providenciando classes, estruturas e métodos para uso independente.
+  * A classe `GameLoop` aceita _Delegates_ para serem chamados durante o _Update_, sendo assim independente do jogo.
+  * A estrutura `Vector2` é usada para saber a posição de algo na consola.
+  * `IGameObject` define o que é necessário um objeto conter para poder ser lido e usado no `GameLoop`.
 
 #### _Zetris_
 
