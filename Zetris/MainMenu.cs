@@ -1,12 +1,21 @@
-﻿using System;
-using GameEngine;
-using System.Collections.Generic;
-using System.Text;
+﻿/// @file
+/// @brief File handles the main menu display.
+///
+/// @author Rodrigo Pinheiro e Tomás Franco
+/// @date 2020
+
+using System;
 
 namespace Zetris
 {
+	/// <summary>
+	/// Used to display main menu on screen.
+	/// </summary>
 	class MainMenu : IMenu
 	{
+		/// <summary>
+		/// Game Logo.
+		/// </summary>
 		private const string _ZETRIS_LOGO = 
 			@" ________  _______  _________  ________  ___  ________      " + 
 			"\n" +
@@ -23,20 +32,41 @@ namespace Zetris
 			@"    \|_______|\|_______|   \|__|  \|__|\|__|\|__|\_________\" + 
 			"\n";
 
+		/// <summary>
+		/// Start Game area text.
+		/// </summary>
 		private const string _START_TXT =
 			"\t\t ------------------------\n" +
 			"\t\t | press ENTER to start |\n" +
 			"\t\t ------------------------\n";
+		/// <summary>
+		/// Exit Game area text.
+		/// </summary>
 		private const string _EXIT_TXT =
 			"\t\t ------------------------\n" +
 			"\t\t |  press ESC to exit   |\n" +
 			"\t\t ------------------------\n";
 
+		/// <summary>
+		/// Game controls text.
+		/// </summary>
 		private const string _CONTROLS =
 			"\t\t     → : Move Right\n" +
 			"\t\t     ← : Move Left\n" +
-			"\t\t     ↓ : Fast Drop";
+			"\t\t     ↓ : Soft Drop";
 
+		/// <summary>
+		/// Char to display when names are empty.
+		/// </summary>
+		private const char _EMPTY_NAME_CHAR = '-';
+		/// <summary>
+		/// Char to display when scores are empty.
+		/// </summary>
+		private const char _EMPTY_SCORE_CHAR = '.';
+
+		/// <summary>
+		/// Show full main menu.
+		/// </summary>
 		public void ShowMenu()
 		{
 			Console.WriteLine(_ZETRIS_LOGO);
@@ -51,25 +81,40 @@ namespace Zetris
 			Console.WriteLine(_CONTROLS);
 		}
 
+		/// <summary>
+		/// Extracts saved scores.
+		/// </summary>
+		/// <returns>Final string to display with scores and names.</returns>
 		private string GetTopScores()
 		{
 			SaveFile save = new SaveFile();
 			byte i = 0;
 			string finalString = "\t\t\tTOP SCORES\n";
 
+			// Correctly display all saved scores
 			foreach(PlayerScore s in save.GetSavedScores())
 			{
+				// Split name and score
 				string[] splitScores = s.ToString('\t').Split('\t');
+				// Add name to the final string
 				finalString += "\t\t     "+ splitScores[0] + '\t';
+				// Add score to the final string
 				finalString += splitScores[1].PadLeft(6, '0');
+				// Add new line
 				finalString += "\n";
+
 				i++;
 			}
 
-			while (i < 10)
+			// Fill all blank spaces
+			while (i < SaveFile._MAX_SAVED_SCORES)
 			{
-				finalString += "\t\t     ---" + '\t';
-				finalString += "".PadLeft(6, '-') + "\n";
+				// Name section
+				finalString += $"\t\t     " +
+					$"{_EMPTY_NAME_CHAR}{_EMPTY_NAME_CHAR}{_EMPTY_NAME_CHAR}"
+					+ '\t';
+				// Score section
+				finalString += "".PadLeft(6, _EMPTY_SCORE_CHAR) + "\n";
 				i++;
 			}
 
