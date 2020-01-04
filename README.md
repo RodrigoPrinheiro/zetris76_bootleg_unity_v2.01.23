@@ -1,4 +1,4 @@
-﻿# Zetris (Tetris com um Z)
+﻿# Zetris (Tetris com um Z)  ![Logo]
 
 **O código fonte deste projeto pode ser encontrado 
 [neste repositório público](https://github.com/RodrigoPrinheiro/zetris76_bootleg_unity_v2.01.23)**
@@ -16,8 +16,8 @@ objetos) e criação da Interface `IGameObject`
 * ### [Tomás Franco](https://github.com/ThomasFranque) 21803301
   
   * Engine para poder ser usado independentemente do jogo.
-  * Sistema de scores.
-  * Menus.
+  * Sistema de scores, incluindo classes de leitura e criação de _save files_.
+  * Implementação dos menus de jogo e apresentação dos mesmos.
   
 ## Arquitetura da solução
 
@@ -61,15 +61,22 @@ dada da seguinte forma:
         i = (W - 1) * 3 - y + (x * W)
         ```
 
-#### Diagrama UML
+### Diagrama UML
 
 ![Diagrama]
 
-#### Fluxograma
+### Fluxograma
 
 * Loop de jogo do _Tetris_
 
 ![Fluxograma]
 
+## Referências usadas
+
+* Projetos anteriores.
+* Trabalho e informação apresentada ao longo das aulas 
+de Linguagens e Programação.
+
 [Diagrama]:Images/Diagrama.png
 [Fluxograma]:Images/Fluxograma.png
+[Logo]:Images/Logo.png
